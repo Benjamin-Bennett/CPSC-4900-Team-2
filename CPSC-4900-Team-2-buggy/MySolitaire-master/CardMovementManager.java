@@ -22,7 +22,9 @@ public class CardMovementManager extends MouseAdapter {
     private CardStack source = null;
     private CardStack dest = null;
     // used for moving a stack of cards
-    private CardStack transferStack = new CardStack(false);
+    //private CardStack transferStack = new CardStack(false);
+    private Card transferStack[] = new Card[1];
+
 
     private boolean validPlayStackMove(Card source, Card dest) {
         int s_val = source.getValue().ordinal();
@@ -65,7 +67,8 @@ public class CardMovementManager extends MouseAdapter {
         start = e.getPoint();
         boolean stopSearch = false;
         Solitaire.getStatusBox().setText("");
-        transferStack.makeEmpty();
+        //transferStack.makeEmpty();
+        transferStack[0] = null;
 
         /*
          * Here we use transferStack to temporarily hold all the cards above
@@ -80,14 +83,18 @@ public class CardMovementManager extends MouseAdapter {
             for (Component ca : source.getComponents()) {
                 Card c = (Card) ca;
                 if (c.getFaceStatus() && source.contains(start)) {
-                    transferStack.putFirst(c);
+                    //transferStack.putFirst(c);
+                    transferStack[0] = c;
                 }
+
                 if (c.contains(start) && source.contains(start) && c.getFaceStatus()) {
                     card = c;
                     stopSearch = true;
-                    System.out.println("Transfer Size: " + transferStack.showSize());
+                    //System.out.println("Transfer Size: " + transferStack.showSize());
+                    System.out.println("Transfer Size: " + transferStack.length);
                     break;
                 }
+
             }
 
         }
@@ -123,7 +130,8 @@ public class CardMovementManager extends MouseAdapter {
             if (Solitaire.getFinal_cards()[x].contains(start)) {
                 source = Solitaire.getFinal_cards()[x];
                 card = source.getLast();
-                transferStack.putFirst(card);
+                //transferStack.putFirst(card);
+                transferStack[0] = card;
                 sourceIsFinalDeck = true;
                 break;
             }
@@ -144,19 +152,6 @@ public class CardMovementManager extends MouseAdapter {
             for (int x = 0; x < Solitaire.getNumPlayDecks(); x++) {
                 dest = Solitaire.getPlayCardStack()[x];
                 // to empty play stack, only kings can go
-                if (dest.empty() && movedCard != null && dest.contains(stop)
-                        && movedCard.getValue() == Card.Value.KING) {
-                    System.out.print("moving new card to empty spot ");
-                    movedCard.setXY(dest.getXY());
-                    Solitaire.table.remove(prevCard);
-                    dest.putFirst(movedCard);
-                    Solitaire.table.repaint();
-                    movedCard = null;
-                    putBackOnDeck = false;
-                    Solitaire.setScore(5);
-                    validMoveMade = true;
-                    break;
-                }
                 // to populated play stack
                 if (movedCard != null && dest.contains(stop) && !dest.empty() && dest.getFirst().getFaceStatus()
                         && validPlayStackMove(movedCard, dest.getFirst())) {
@@ -211,7 +206,7 @@ public class CardMovementManager extends MouseAdapter {
                 dest = Solitaire.getPlayCardStack()[x];
                 // MOVING TO POPULATED STACK
                 if (card.getFaceStatus() && dest.contains(stop) && source != dest && !dest.empty()
-                        && validPlayStackMove(card, dest.getFirst()) && transferStack.showSize() == 1) {
+                        && validPlayStackMove(card, dest.getFirst()) && transferStack.length == 1) {
                     Card c = null;
                     if (sourceIsFinalDeck)
                         c = source.pop();
@@ -241,7 +236,12 @@ public class CardMovementManager extends MouseAdapter {
                         Solitaire.setScore(10);
                     validMoveMade = true;
                     break;
-                } else if (dest.empty() && card.getValue() == Card.Value.KING && transferStack.showSize() == 1) {// MOVING TO EMPTY STACK, ONLY KING ALLOWED
+                }
+                /**
+                 * This is the portion of code that allows a king to move to an empty tableau, which doesn't exist in
+                 * demon fan ruleset. Commented out for now to make sure that it doesn't break anything to just remove it
+                 * completely.
+                else if (dest.empty() && card.getValue() == Card.Value.KING && transferStack.showSize() == 1) {// MOVING TO EMPTY STACK, ONLY KING ALLOWED
                     Card c = null;
                     if (sourceIsFinalDeck)
                         c = source.pop();
@@ -292,15 +292,16 @@ public class CardMovementManager extends MouseAdapter {
                     Solitaire.setScore(5);
                     validMoveMade = true;
                     break;
-                }
+                }*/
                 // to POPULATED STACK
-                if (dest.contains(stop) && !transferStack.empty() && source.contains(start)
-                        && validPlayStackMove(transferStack.getFirst(), dest.getFirst())) {
+                if (dest.contains(stop) && transferStack.length != 0 && source.contains(start)
+                        && validPlayStackMove(transferStack[0], dest.getFirst())) {
                     System.out.println("Regular Stack Transfer");
-                    while (!transferStack.empty()) {
-                        System.out.println("popping from transfer: " + transferStack.getFirst().getValue());
-                        dest.putFirst(transferStack.popFirst());
-                        source.popFirst();
+                    while (transferStack[0] != null) {
+                        System.out.println("popping from transfer: " + transferStack[0].getValue());
+                        dest.putFirst(transferStack[0]);
+                        //source.popFirst();
+                        transferStack[0] = null;
                     }
                     if (source.getFirst() != null) {
                         Card temp = source.getFirst().setFaceup();
@@ -401,6 +402,8 @@ public class CardMovementManager extends MouseAdapter {
         if (checkForWin && gameOver) {
             JOptionPane.showMessageDialog(Solitaire.table, "Congratulations! You've Won!");
             Solitaire.getStatusBox().setText("Game Over!");
+            Leaderboard.addScore();
+            Leaderboard.updateFile();
         }
         // RESET VARIABLES FOR NEXT EVENT
         start = null;

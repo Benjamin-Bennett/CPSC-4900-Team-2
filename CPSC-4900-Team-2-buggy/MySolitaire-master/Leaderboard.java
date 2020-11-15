@@ -7,7 +7,7 @@ public class Leaderboard {
      * and is responsible for painting the leaderboard data into
      * a frame when the user selects the "Show leaderboard" button.
      */
-    int gameScore = Solitaire.getScore();
+    public static int gameScore = Solitaire.getScore();
     private static String scoresTXT = "MySolitaire-master\\leaderboards.txt";
     public static List<String> scores = new ArrayList<>();
 
@@ -33,11 +33,8 @@ public class Leaderboard {
     }
 
     /**No return method to update ArrayList that contains leaderboard scores
-     *
-     * @param gameScore current value of score from running game
-     * @param scores ArrayList containing current values on leaderboard
      */
-    private void addScore(int gameScore, List<String> scores){
+    public static void addScore(){
         boolean scoreSpot = false;
         int x = 0;
         while (scoreSpot == false && scores.size() > x ){
@@ -51,9 +48,9 @@ public class Leaderboard {
 
     /**No return method to write current leaderboard held in ArrayList to persistent TXT file storage
      *
-     * @param scores ArrayList containing current scores
+     *
      */
-    private void updateFile(List<String> scores) {
+    public static void updateFile() {
         try {
             FileWriter write = new FileWriter(scoresTXT);
             String updateScores = scores.toString();

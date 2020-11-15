@@ -298,19 +298,21 @@ public class Solitaire {
         addListenerIfNotPresent(showRulesButton, new ShowRulesListener());
         showRulesButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2, 120, 30);
 
-        showLeaderboardButton.addActionListener(new LeaderboardListener());
+        addListenerIfNotPresent(showLeaderboardButton, new LeaderboardListener());
         showLeaderboardButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2+30, 120, 30);
     }
 
     private static void showLeaderboard(){
         Leaderboard.initializeBoards();
         table.removeAll();
+        initializeMenuButtons();
         System.out.println("Leaderboard");
         int x = 0;
         while (x < 10 && x < Leaderboard.scores.size()){
             System.out.println(Leaderboard.scores.get(x));
             x++;
         }
+        table.add(mainMenuButton);
         table.repaint();
     }
 

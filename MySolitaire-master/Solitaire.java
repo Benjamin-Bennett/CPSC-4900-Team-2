@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.colorchooser.ColorSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,9 +43,19 @@ public class Solitaire {
     private static JTextField timeBox = new JTextField();// displays the time
     private static JTextField statusBox = new JTextField();// status messages
 
+    private static String defaultRColorTxt = "Background Red Value";
+    private static String defaultGColorTxt = "Background Green Value";
+    private static String defaultBColorTxt = "Background Blue Value";
+    private static JTextField rColor = new JTextField("Background Red Value");// background color
+    private static JTextField gColor = new JTextField("Background Green Value");// background color
+    private static JTextField bColor = new JTextField("Background Blue Value");// background color
+    private static JButton confirmButton = new JButton("Apply");
+
+
     public static JButton getMainMenuButton() {
         return mainMenuButton;
     }
+
 
     private static JButton mainMenuButton= new JButton("Main Menu");
     private static JButton optionsMenuButton = new JButton("Options Menu");
@@ -343,6 +355,13 @@ public class Solitaire {
     {
         addListenerIfNotPresent(mainMenuButton, new MainMenuListener());
         mainMenuButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 -30, 120, 30);
+
+        rColor.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2, 120, 30);
+        gColor.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 + 30, 120, 30);
+        bColor.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 +60, 120, 30);
+
+        addListenerIfNotPresent(confirmButton, new ConfirmListener());
+        confirmButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 + 90, 120, 30);
     }
 
     private static void startOptionsMenu()
@@ -351,6 +370,10 @@ public class Solitaire {
         initializeOptionsMenuButtonsButtons();
         table.add(gameTitle);
         table.add(mainMenuButton);
+        table.add(rColor);
+        table.add(gColor);
+        table.add(bColor);
+        table.add(confirmButton);
         table.repaint();
     }
 
@@ -467,5 +490,20 @@ public class Solitaire {
     private static class RedealListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {Redeal.redeal();}
+    }
+
+    private static class ConfirmListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Color bg = new Color(Integer.parseInt(rColor.getText()),
+                    Integer.parseInt(gColor.getText()),
+                    Integer.parseInt(bColor.getText()));
+            table.setBackground(bg);
+            rColor.setText(defaultRColorTxt);
+            gColor.setText(defaultGColorTxt);
+            bColor.setText(defaultBColorTxt);
+
+        }
     }
 }

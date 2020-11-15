@@ -47,20 +47,7 @@ class Card extends JPanel {
     }
 
     public Suit getSuit() {
-        switch (_suit) {
-            case HEARTS:
-                System.out.println("Hearts");
-                break;
-            case DIAMONDS:
-                System.out.println("Diamonds");
-                break;
-            case SPADES:
-                System.out.println("Spades");
-                break;
-            case CLUBS:
-                System.out.println("Clubs");
-                break;
-        }
+        System.out.println(_suit);
         return _suit;
     }
 
@@ -69,47 +56,7 @@ class Card extends JPanel {
     }
 
     public Value getValue() {
-        switch (_value) {
-            case ACE:
-                System.out.println("Ace");
-                break;
-            case TWO:
-                System.out.println("Two");
-                break;
-            case THREE:
-                System.out.println("Three");
-                break;
-            case FOUR:
-                System.out.println("Four");
-                break;
-            case FIVE:
-                System.out.println("Five");
-                break;
-            case SIX:
-                System.out.println("Six");
-                break;
-            case SEVEN:
-                System.out.println("Seven");
-                break;
-            case EIGHT:
-                System.out.println("Eight");
-                break;
-            case NINE:
-                System.out.println("Nine");
-                break;
-            case TEN:
-                System.out.println("Ten");
-                break;
-            case JACK:
-                System.out.println("Jack");
-                break;
-            case QUEEN:
-                System.out.println("Queen");
-                break;
-            case KING:
-                System.out.println("King");
-                break;
-        }
+        System.out.println(_value);
         return _value;
     }
 
@@ -202,7 +149,7 @@ class Card extends JPanel {
             }
             super.paintComponent(g);
             setOpaque(false);
-            g.drawImage(image, 0, 0,100, 150,  this);
+            g.drawImage(image, 0, 0,CARD_WIDTH, CARD_HEIGHT,  this);
 
             /**int new_x_offset = x_offset + (CARD_WIDTH - 30);
             switch (_value) {

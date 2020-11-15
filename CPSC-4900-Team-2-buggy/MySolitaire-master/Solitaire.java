@@ -34,6 +34,7 @@ public class Solitaire {
     private static JButton showRulesButton = new JButton("Show Rules");
     private static JButton newGameButton = new JButton("New Game");
     private static JButton toggleTimerButton = new JButton("Pause Timer");
+    private static JButton exitButton = new JButton("Exit");
     private static JButton showLeaderboardButton = new JButton("Leaderboard");
     private static JTextField scoreBox = new JTextField();// displays the score
     private static JTextField timeBox = new JTextField();// displays the time
@@ -295,11 +296,17 @@ public class Solitaire {
         addListenerIfNotPresent(newGameButton, new NewGameListener());
         newGameButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 -30, 120, 30);
 
+        addListenerIfNotPresent(optionsMenuButton, new OptionsMenuListener());
+        optionsMenuButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2, 120, 30);
+
         addListenerIfNotPresent(showRulesButton, new ShowRulesListener());
-        showRulesButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2, 120, 30);
+        showRulesButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 + 30, 120, 30);
 
         addListenerIfNotPresent(showLeaderboardButton, new LeaderboardListener());
-        showLeaderboardButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2+30, 120, 30);
+        showLeaderboardButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2+60, 120, 30);
+
+        addListenerIfNotPresent(exitButton, new ExitListener());
+        exitButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 + 90, 120, 30);
     }
 
     private static void showLeaderboard(){
@@ -321,15 +328,17 @@ public class Solitaire {
         initializeMenuButtons();
         table.add(gameTitle);
         table.add(newGameButton);
+        table.add(optionsMenuButton);
         table.add(showRulesButton);
         table.add(showLeaderboardButton);
+        table.add(exitButton);
         table.repaint();
     }
 
     private static void initializeOptionsMenuButtonsButtons()
     {
         addListenerIfNotPresent(mainMenuButton, new MainMenuListener());
-        newGameButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 -30, 120, 30);
+        mainMenuButton.setBounds(TABLE_WIDTH/2-70, TABLE_HEIGHT/2 -30, 120, 30);
     }
 
     private static void startOptionsMenu()
